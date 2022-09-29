@@ -4,7 +4,7 @@
     margin: 0%;
 }
 
-.App {
+.input-book {
     width: 40%;
     margin: 2% auto;
     border: 1px solid black;
@@ -18,3 +18,41 @@
     width: 100%;
 }
 
+.list-buku {
+    width: 40%;
+    border: 1px solid black;
+    border-radius: 20px;
+    margin: 2% auto;
+    height: auto;
+    padding: 30px;
+}
+
+.not-read {
+    width: 40%;
+    border: 1px solid black;
+    border-radius: 20px;
+    margin: auto;
+    height: auto;
+    padding: 30px;
+}
+
+.done-read {
+    width: 40%;
+    border: 1px solid black;
+    border-radius: 20px;
+    margin: 2% auto;
+    height: auto;
+    padding: 30px;
+}
+
+.book {
+    border: 1px solid black;
+    margin-top: 4%;
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+}
+
+.button-confirmation {
+    margin: 5% 0 0 60%;
+}

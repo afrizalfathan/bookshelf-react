@@ -10,11 +10,13 @@ const App = () => {
     const [tahun, setTahun] = useState("")
     const doneRead = useRef(false)
 
+    // fungsi generate id untuk key
     function generateKey() {
         return Date.now()
     }
 
-    function checkBook(e) {
+    // fungsi untuk tambah buku
+    function addBook(e) {
         const checkRead = doneRead.current.checked
         e.preventDefault()
 
@@ -28,13 +30,55 @@ const App = () => {
                 done: checkRead,
             },
         ])
-
-        console.log(book)
     }
 
+    // fungsi untuk hapus buku
     function deleteButtonHandler(bookId) {
         const filteredBook = book.filter((buku) => buku.id !== bookId)
         setBook(filteredBook)
+    }
+
+    // fungsi untuk tambahkan buku ke daftar yang sudah dibaca
+    function doneButtonHandler(bookDone) {
+        const currentBook = bookDone
+        const updatedBook = {
+            id: bookDone.id,
+            judul: bookDone.judul,
+            penulis: bookDone.penulis,
+            tahun: bookDone.tahun,
+            done: true,
+        }
+
+        const indexCurrentBook = book.findIndex(
+            (buku) => buku.id === currentBook.id
+        )
+
+        const updatedBooks = [...book]
+        updatedBooks[indexCurrentBook] = updatedBook
+
+        setBook(updatedBooks)
+    }
+
+    // fungsi untuk tambahkan buku ke daftar yang belum dibaca
+
+    function notDoneButtonHandler(bookDone) {
+        const currentBook = bookDone
+        const updatedBook = {
+            id: bookDone.id,
+            judul: bookDone.judul,
+            penulis: bookDone.penulis,
+            tahun: bookDone.tahun,
+            done: false,
+        }
+
+        const indexCurrentBook = book.findIndex(
+            (buku) => buku.id === currentBook.id
+        )
+
+        const updatedBooks = [...book]
+        updatedBooks[indexCurrentBook] = updatedBook
+
+        setBook(updatedBooks)
     }
 
     return (
@@ -74,27 +118,41 @@ const App = () => {
                             variant="primary"
                             type="submit"
                             className="tombol-input"
-                            onClick={checkBook}
+                            onClick={addBook}
                         >
                             Masukkan Buku
                         </Button>
                     </Form>
                 </div>
             </div>
-            <div className="list-buku">
-                <h2>Daftar Buku</h2>
-                {book.map((buku) => (
-                    <Book
-                        buku={buku}
-                        deleteButtonHandler={deleteButtonHandler}
-                    />
-                ))}
-            </div>
+
             <div className="not-read">
                 <h2>Belum Dibaca</h2>
+                {book
+                    .filter((buku) => buku.done === false)
+                    .map((bukuDone) => (
+                        <Book
+                            key={bukuDone.id}
+                            buku={bukuDone}
+                            deleteButtonHandler={deleteButtonHandler}
+                            doneButtonHandler={doneButtonHandler}
+                            notDoneButtonHandler={notDoneButtonHandler}
+                        />
+                    ))}
             </div>
             <div className="done-read">
                 <h2>Sudah Dibaca</h2>
+                {book
+                    .filter((buku) => buku.done === true)
+                    .map((bukuDone) => (
+                        <Book
+                            key={bukuDone.id}
+                            buku={bukuDone}
+                            deleteButtonHandler={deleteButtonHandler}
+                            doneButtonHandler={doneButtonHandler}
+                            notDoneButtonHandler={notDoneButtonHandler}
+                        />
+                    ))}
             </div>
         </div>
     )

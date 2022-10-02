@@ -2,9 +2,14 @@ import { Button } from "react-bootstrap"
 import { faTrash, faCheck, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-const Book = ({ buku, deleteButtonHandler }) => {
+const Book = ({
+    buku,
+    deleteButtonHandler,
+    doneButtonHandler,
+    notDoneButtonHandler,
+}) => {
     return (
-        <div className="book" key={buku.id}>
+        <div className="book">
             <div className="book-detail">
                 <h4>{buku.judul}</h4>
                 <p>{buku.tahun}</p>
@@ -12,13 +17,24 @@ const Book = ({ buku, deleteButtonHandler }) => {
             </div>
 
             <div className="button-confirmation">
-                <Button variant="success">
-                    <FontAwesomeIcon icon={faCheck} />
-                </Button>
+                {!buku.done && (
+                    <Button
+                        variant="success"
+                        onClick={doneButtonHandler.bind(this, buku)}
+                    >
+                        <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                )}
 
-                <Button variant="primary">
-                    <FontAwesomeIcon icon={faXmark} />
-                </Button>
+                {buku.done && (
+                    <Button
+                        variant="primary"
+                        onClick={notDoneButtonHandler.bind(this, buku)}
+                    >
+                        <FontAwesomeIcon icon={faXmark} />
+                    </Button>
+                )}
+
                 <Button
                     variant="warning"
                     onClick={deleteButtonHandler.bind(this, buku.id)}

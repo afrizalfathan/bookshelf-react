@@ -8,6 +8,9 @@ const App = () => {
     const [judul, setJudul] = useState("")
     const [penulis, setPenulis] = useState("")
     const [tahun, setTahun] = useState("")
+    const [errors, setErrors] = useState({})
+
+    const [validated, setValidated] = useState(false)
     const doneRead = useRef(false)
 
     // fungsi generate id untuk key
@@ -15,8 +18,34 @@ const App = () => {
         return Date.now()
     }
 
+    // fungsi untuk pengecekan form
+    function findErrors() {
+        const newErrors = {}
+        if (!judul || judul === "")
+            newErrors.judul = "Kolom judul tidak boleh kosong!"
+        if (!penulis || penulis === "")
+            newErrors.penulis = "Kolom penulis tidak boleh kosong!"
+        if (!penulis || penulis === "")
+            newErrors.penulis = "Kolom penulis tidak boleh kosong!"
+
+        return newErrors
+    }
+
     // fungsi untuk tambah buku
     function addBook(e) {
+        const newErrors = findErrors()
+        const form = e.currentTarget
+        if (
+            Object.keys(newErrors).length > 0 &&
+            form.checkValidity() === false
+        ) {
+            e.stopPropagation()
+            e.preventDefault()
+            setErrors(newErrors)
+            return
+        }
+
+        setValidated(true)
         const checkRead = doneRead.current.checked
         e.preventDefault()
 
@@ -74,27 +103,39 @@ const App = () => {
             <div className="input-book">
                 <h2>Bookshelf App</h2>
                 <div className="input-container">
-                    <Form>
+                    <Form noValidate validated={validated} onSubmit={addBook}>
                         <Form.Group className="mb-3">
                             <Form.Label>Judul :</Form.Label>
                             <Form.Control
-                                type="email"
+                                type="text"
                                 onChange={(e) => setJudul(e.target.value)}
+                                required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Kolom judul wajib diisi!
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Penulis :</Form.Label>
                             <Form.Control
                                 type="text"
                                 onChange={(e) => setPenulis(e.target.value)}
+                                required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Kolom penulis wajib diisi!
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Tahun :</Form.Label>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 onChange={(e) => setTahun(e.target.value)}
+                                required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Kolom penulis tahun diisi!
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Check
                             label="Sudah Dibaca"
@@ -106,7 +147,6 @@ const App = () => {
                             variant="primary"
                             type="submit"
                             className="tombol-input"
-                            onClick={addBook}
                         >
                             Masukkan Buku
                         </Button>

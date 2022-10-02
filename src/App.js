@@ -38,15 +38,14 @@ const App = () => {
         setBook(filteredBook)
     }
 
-    // fungsi untuk tambahkan buku ke daftar yang sudah dibaca
-    function doneButtonHandler(bookDone) {
-        const currentBook = bookDone
+    function changeBook(checkBook, boolean) {
+        const currentBook = checkBook
         const updatedBook = {
-            id: bookDone.id,
-            judul: bookDone.judul,
-            penulis: bookDone.penulis,
-            tahun: bookDone.tahun,
-            done: true,
+            id: checkBook.id,
+            judul: checkBook.judul,
+            penulis: checkBook.penulis,
+            tahun: checkBook.tahun,
+            done: boolean,
         }
 
         const indexCurrentBook = book.findIndex(
@@ -59,26 +58,15 @@ const App = () => {
         setBook(updatedBooks)
     }
 
+    // fungsi untuk tambahkan buku ke daftar yang sudah dibaca
+    function doneButtonHandler(bookDone) {
+        changeBook(bookDone, true)
+    }
+
     // fungsi untuk tambahkan buku ke daftar yang belum dibaca
 
     function notDoneButtonHandler(bookDone) {
-        const currentBook = bookDone
-        const updatedBook = {
-            id: bookDone.id,
-            judul: bookDone.judul,
-            penulis: bookDone.penulis,
-            tahun: bookDone.tahun,
-            done: false,
-        }
-
-        const indexCurrentBook = book.findIndex(
-            (buku) => buku.id === currentBook.id
-        )
-
-        const updatedBooks = [...book]
-        updatedBooks[indexCurrentBook] = updatedBook
-
-        setBook(updatedBooks)
+        changeBook(bookDone, false)
     }
 
     return (

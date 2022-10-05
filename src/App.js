@@ -1,14 +1,26 @@
 import "./style/style.css"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button, Form } from "react-bootstrap"
 import Book from "./component/Book"
 
 const App = () => {
-    const [book, setBook] = useState([])
+    useEffect(() => {
+        localStorage.setItem("buku", JSON.stringify(book))
+    })
+
+    function getDataFromLocalStorage() {
+        const bukuData = localStorage.getItem("buku")
+        if (bukuData) {
+            return JSON.parse(bukuData)
+        } else {
+            return []
+        }
+    }
+
+    const [book, setBook] = useState(getDataFromLocalStorage())
     const [judul, setJudul] = useState("")
     const [penulis, setPenulis] = useState("")
     const [tahun, setTahun] = useState("")
-    const [errors, setErrors] = useState({})
 
     const [validated, setValidated] = useState(false)
     const doneRead = useRef(false)
@@ -41,7 +53,6 @@ const App = () => {
         ) {
             e.stopPropagation()
             e.preventDefault()
-            setErrors(newErrors)
             return
         }
 
